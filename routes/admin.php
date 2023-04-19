@@ -25,12 +25,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('admin.welcome');
-});
+// Route::get('/', function () {
+//     return view('admin.welcome');
+// });
 
 Route::resource('owners',OwnersController::class)
-    ->middleware(['auth:admin', 'verified']);
+    ->middleware(['auth:admin', 'verified'])->except(['show']);//showは外す
 
 Route::prefix('expired-owners')->
     middleware('auth:admin')->group(
