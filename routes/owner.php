@@ -43,7 +43,7 @@ Route::prefix('shop')->
 Route::resource('images',ImageController::class)
 ->middleware(['auth:owners', 'verified'])->except(['show']);//showは外す
 
-Route::resource('productss',ProductController::class)
+Route::resource('products',ProductController::class)
 ->middleware(['auth:owners', 'verified'])->except(['show']);//showは外す
 
 
