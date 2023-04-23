@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Shop;
 use App\Models\SecondaryCategory;
 use App\Models\Image;
+use App\Models\Stock;
 
 class Product extends Model
 {
@@ -37,5 +38,8 @@ class Product extends Model
      * $p->findOrFail(1)->imageFirst->filename
      */
     ///////////////////////////////////////////////////////////////////////
-
+ 
+    public function stock(){
+        return $this->hasmany(Stock::class);//1対多のリレーション
+    }
 }
