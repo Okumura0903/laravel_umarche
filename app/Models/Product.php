@@ -53,6 +53,16 @@ class Product extends Model
      */
     ///////////////////////////////////////////////////////////////////////
  
+    public function imageSecond(){//!!image1と、カラム名がまったく同じは設定できないので名前を変える
+        return $this->belongsTo(Image::class,'image2','id');//第二引数が_idという形でないので、自動で推測されない⇒第三引数にで'id'に紐づくと明記
+    }
+    public function imageThird(){//!!image1と、カラム名がまったく同じは設定できないので名前を変える
+        return $this->belongsTo(Image::class,'image3','id');//第二引数が_idという形でないので、自動で推測されない⇒第三引数にで'id'に紐づくと明記
+    }
+    public function imageFourth(){//!!image1と、カラム名がまったく同じは設定できないので名前を変える
+        return $this->belongsTo(Image::class,'image4','id');//第二引数が_idという形でないので、自動で推測されない⇒第三引数にで'id'に紐づくと明記
+    }
+
     public function stock(){
         return $this->hasmany(Stock::class);//1対多のリレーション
     }
