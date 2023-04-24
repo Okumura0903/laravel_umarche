@@ -57,6 +57,7 @@
                                             </option>
                                         @endforeach
                                         </select>
+                                        <x-input-error :messages="$errors->get('shop_id')" class="mt-2" />
                                     </div>
                                 </div>
                                 <div class="p-2 w-1/2 mx-auto">
@@ -72,17 +73,23 @@
                                             @endforeach
                                         @endforeach
                                         </select>
-                                        {{--<x-input-error :messages="$errors->get('category')" class="mt-2" />--}}
+                                        <x-input-error :messages="$errors->get('category')" class="mt-2" />
                                     </div>
                                 </div>
                                 <x-select-image :images="$images" name="image1" />
                                 <x-select-image :images="$images" name="image2" />
                                 <x-select-image :images="$images" name="image3" />
                                 <x-select-image :images="$images" name="image4" />
+                                <x-input-error :messages="$errors->get('image1')" class="mt-2" />
+                                <x-input-error :messages="$errors->get('image2')" class="mt-2" />
+                                <x-input-error :messages="$errors->get('image3')" class="mt-2" />
+                                <x-input-error :messages="$errors->get('image4')" class="mt-2" />
+
                                 <div class="p-2 w-1/2 mx-auto">
                                     <div class="relative flex justify-around">
                                     <label><input type="radio" name="is_selling" value="1" class="mr-2" checked>販売中</label>
                                     <label><input type="radio" name="is_selling" value="0" class="mr-2">停止中</label>
+                                    <x-input-error :messages="$errors->get('is_selling')" class="mt-2" />
                                     </div>
                                 </div>
                                 <div class="p-2 w-full flex justify-around mt-4">
