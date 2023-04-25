@@ -166,10 +166,10 @@ class ProductController extends Controller
                     $product->is_selling=$request->is_selling;
                     $product->save();
                     
-                    if($request->type==='1'){
+                    if($request->type=== \Constant::PRODUCT_LIST['add']){//configのapp.phpのaliasesにCommon.phpのクラスを追加してある
                         $newQuantity=$request->quantity;
                     }
-                    if($request->type==='2'){
+                    if($request->type=== \Constant::PRODUCT_LIST['reduce']){
                         $newQuantity=$request->quantity*-1;
                     }
                     Stock::create([
