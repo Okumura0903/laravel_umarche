@@ -73,6 +73,7 @@ class Product extends Model
         return $this->belongsToMany(User::class,'carts')
         ->withPivot(['id','quantity']);
     }
+
     public function scopeAvailableItems($query){//ローカルスコープ
         $stocks=DB::table('t_stocks')
         ->select('product_id',DB::raw('sum(quantity) as quantity'))//rawで生のSQLを書く（sumを使うため）
@@ -91,5 +92,22 @@ class Product extends Model
             ->select('products.id as id','products.name as name','products.price','products.sort_order as sort_order',
             'products.information','secondary_categories.name as category','image1.filename as filename')
             ;
+    }
+    public function scopeSortOrder($query,$sortOrder){
+        if($sortOrder===null || $sortOrder===\Constant::SORT_ORDER['recommend']){
+            return $query->orderBy('sort_order','asc');
+        }
+        if($sortOrder===\Constant::SORT_ORDER['higherPrice']){
+            return $query->orderBy('price','desc');
+        }
+        if($sortOrder===\Constant::SORT_ORDER['lowerPrice']){
+            return $query->orderBy('price','asc');
+        }
+        if($sortOrder===\Constant::SORT_ORDER['later']){
+            return $query->orderBy('products.created_at','desc');
+        }
+        if($sortOrder===\Constant::SORT_ORDER['older']){
+            return $query->orderBy('products.created_at','asc');
+        }
     }
 }
