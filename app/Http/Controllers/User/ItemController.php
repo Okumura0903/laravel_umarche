@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Stock;
 use Illuminate\Support\Facades\DB;
+use App\Models\PrimaryCategory;
 
 class ItemController extends Controller
 {
@@ -28,7 +29,11 @@ class ItemController extends Controller
     }
     //
     public function index(Request $request){
+        $categories=PrimaryCategory::with('secondary')//Eagerローディング
+        ->get();
+
         $products=Product::AvailableItems()
+        ->selectCategory($request->category ?? '0')
         ->sortOrder($request->sort)
         ->paginate($request->pagination ?? '20');//ローカルスコープ
 
@@ -56,7 +61,7 @@ class ItemController extends Controller
          //dd($stocks,$products);
         // $products=Product::all();
 
-        return view('user.index',compact('products'));
+        return view('user.index',compact('products','categories'));
     }
     public function show($id){
         $product=Product::findOrFail($id);
