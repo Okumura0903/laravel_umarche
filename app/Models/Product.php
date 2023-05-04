@@ -9,6 +9,7 @@ use App\Models\SecondaryCategory;
 use App\Models\Image;
 use App\Models\Stock;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 
 class Product extends Model
 {
@@ -71,5 +72,24 @@ class Product extends Model
     public function users(){//中間テーブル（ピボットテーブル）で多対多の関連付け
         return $this->belongsToMany(User::class,'carts')
         ->withPivot(['id','quantity']);
+    }
+    public function scopeAvailableItems($query){//ローカルスコープ
+        $stocks=DB::table('t_stocks')
+        ->select('product_id',DB::raw('sum(quantity) as quantity'))//rawで生のSQLを書く（sumを使うため）
+        ->groupBy('product_id')//プロダクトごとに
+        ->having('quantity','>=',1);//合計が１以上のもの
+
+        return $query
+            ->joinSub($stocks,'stock',function($join){//サブクエリ、サブクエリのテーブル名（stockという名前のテーブルを作る）、表示する列の情報
+                $join->on('products.id','=','stock.product_id');//２つのテーブルの関連するID
+            })
+            ->join('shops','products.shop_id','=','shops.id')
+            ->join('secondary_categories','products.secondary_category_id','=','secondary_categories.id')
+            ->join('images as image1','products.image1','=','image1.id')
+            ->where('shops.is_selling',true)
+            ->where('products.is_selling',true)
+            ->select('products.id as id','products.name as name','products.price','products.sort_order as sort_order',
+            'products.information','secondary_categories.name as category','image1.filename as filename')
+            ;
     }
 }
