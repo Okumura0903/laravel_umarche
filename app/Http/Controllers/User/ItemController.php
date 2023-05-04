@@ -13,6 +13,18 @@ class ItemController extends Controller
     public function __construct()
     {
         $this->middleware('auth:users');
+
+        $this->middleware(function($request,$next){
+            $id=$request->route()->parameter('item');//URLの数字（productId）を取得　※文字列型
+            if(!is_null($id)){
+                $id=(int)$id;
+                $itemId=Product::AvailableItems()->where('products.id',$id)->exists();//パラメータで入ってきたものが表示できる商品か？
+                if(!$itemId){//exists()なのでtrueかfalse 存在していなかったら
+                    abort(404);
+                }
+            }
+            return $next($request);
+        });
     }
     //
     public function index(){
