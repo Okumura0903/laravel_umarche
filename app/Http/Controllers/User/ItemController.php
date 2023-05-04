@@ -30,7 +30,7 @@ class ItemController extends Controller
     public function index(Request $request){
         $products=Product::AvailableItems()
         ->sortOrder($request->sort)
-        ->get();//ローカルスコープ
+        ->paginate($request->pagination);//ローカルスコープ
 
         // $stocks=DB::table('t_stocks')
         // ->select('product_id',DB::raw('sum(quantity) as quantity'))//rawで生のSQLを書く（sumを使うため）
