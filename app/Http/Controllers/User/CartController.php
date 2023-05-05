@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Models\Stock;
 use App\Services\CartService;
 use App\Jobs\SendThanksMail;
+use App\Jobs\SendOrderedMail;
 
 class CartController extends Controller
 {
@@ -50,13 +51,6 @@ class CartController extends Controller
         return redirect()->route('user.cart.index');
     }
     public function checkout(){
-        ////
-        $items=Cart::where('user_id',Auth::id())->get();
-        $products=CartService::getItemsInCart($items);
-        $user = User::findOrFail(Auth::id());
-        SendThanksMail::dispatch($products,$user);
-        dd('ユーザーメール送信');
-        ////
         $user = User::findOrFail(Auth::id());
         $products = $user->products;
         $stripe = new \Stripe\StripeClient(env('STRIPE_SECRET_KEY'));
@@ -108,6 +102,15 @@ class CartController extends Controller
         return redirect($session->url);
     }
     public function success(){
+            ////メール送信
+            $items=Cart::where('user_id',Auth::id())->get();
+            $products=CartService::getItemsInCart($items);
+            $user = User::findOrFail(Auth::id());
+            SendThanksMail::dispatch($products,$user);
+            foreach($products as $product){
+                SendOrderedMail::dispatch($product,$user);
+            }
+            ////
         Cart::where('user_id',Auth::id())->delete();
         return redirect()->route('user.items.index');
     }
