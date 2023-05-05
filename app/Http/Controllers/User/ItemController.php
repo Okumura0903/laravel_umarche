@@ -33,8 +33,8 @@ class ItemController extends Controller
     //
     public function index(Request $request){
         //非同期に送信
-        SendThanksMail::dispatch();
-        
+//        SendThanksMail::dispatch();
+
         $categories=PrimaryCategory::with('secondary')//Eagerローディング
         ->get();
 
